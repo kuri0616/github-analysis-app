@@ -10,6 +10,8 @@ class GitHubUser extends Model
 {
     use HasFactory;
 
+    protected $table = 'github_users';
+
     protected $primaryKey = 'id';
 
     public $incrementing = false;

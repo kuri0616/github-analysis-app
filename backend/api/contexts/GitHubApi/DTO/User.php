@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\GitHub\DTOs;
+namespace App\Contexts\GitHubApi\DTO;
 
-class UserDTO
+class User
 {
     public int $id;
     public string $login;
