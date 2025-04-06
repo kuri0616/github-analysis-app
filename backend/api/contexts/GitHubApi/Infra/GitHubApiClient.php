@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Services\GitHub;
+namespace App\Contexts\GitHubApi\Infra;
 
-use App\Services\GitHub\DTOs\RepositoryDTO;
-use App\Services\GitHub\DTOs\PullRequestDTO;
-use App\Services\GitHub\Exceptions\GitHubApiException;
+use App\Contexts\GitHubApi\DTO\Repository;
+use App\Contexts\GitHubApi\DTO\PullRequest;
+use App\Contexts\GitHubApi\DTO\User;
+use App\Contexts\GitHubApi\DTO\UserCollection;
+use App\Contexts\GitHubApi\Exception\GitHubApiException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -30,16 +32,16 @@ class GitHubApiClient
      *
      * @param string $owner
      * @param string $repository
-     * @return RepositoryDTO
+     * @return Repository
      */
-    public function getRepository(string $owner, string $repository ): RepositoryDTO
+    public function getRepository(string $owner, string $repository ): Repository
     {
         $cacheKey = "github_repo_{$owner}_{$repository}";
         $cacheTtl = 3600;
 
         return Cache::remember($cacheKey, $cacheTtl, function () use ($owner, $repository) {
             $response = $this->makeRequest("repos/{$owner}/{$repository}");
-            return new RepositoryDTO($response);
+            return new Repository($response);
         });
     }
 
@@ -66,7 +68,7 @@ class GitHubApiClient
             $response = $this->makeRequest("repos/{$owner}/{$repository}/pulls", $params);
 
             return array_map(function ($pullRequest) {
-                return new PullRequestDTO($pullRequest);
+                return new PullRequest($pullRequest);
             }, $response);
         });
     }
@@ -77,15 +79,15 @@ class GitHubApiClient
      * @param string $owner
      * @param string $repository
      * @param int $number
-     * @return PullRequestDTO
+     * @return PullRequest
      */
-    public function getPullRequest(string $owner, string $repository, int $number): PullRequestDTO
+    public function getPullRequest(string $owner, string $repository, int $number): PullRequest
     {
         $cacheKey = "github_pull_{$owner}_{$repository}_{$number}";
         $cacheTtl = 3600;
         return Cache::remember($cacheKey, $cacheTtl, function () use ($owner, $repository, $number) {
             $response = $this->makeRequest("repos/{$owner}/{$repository}/pulls/{$number}");
-            return new PullRequestDTO($response);
+            return new PullRequest($response);
         });
     }
 
@@ -111,15 +113,17 @@ class GitHubApiClient
      *
      * @param string $owner
      * @param string $repository
-     * @return array
+     * @return UserCollection
      */
-    public function getCollaborators(string $owner, string $repository): array
+    public function getCollaborators(string $owner, string $repository): UserCollection
     {
         $cacheKey = "github_collaborators_{$owner}_{$repository}";
         $cacheTtl = 86400;
         return Cache::remember($cacheKey, $cacheTtl, function () use ($owner, $repository) {
             $response = $this->makeRequest("repos/{$owner}/{$repository}/collaborators");
-            return $response;
+            return new UserCollection(array_map(function ($collaborator) {
+                return new User($collaborator);
+            }, $response));
         });
     }
 

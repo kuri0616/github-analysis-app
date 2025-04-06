@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Services\GitHub\DTOs;
+namespace App\Contexts\GitHubApi\DTO;
 
-class RepositoryDTO
+class Repository
 {
     public int $id;
     public string $name;
     public string $fullName;
     public string $description;
     public bool $private;
-    public ?UserDTO $owner;
+    public ?User $owner;
     public string $htmlUrl;
     public ?string $language;
     public int $forksCount;
@@ -33,7 +33,7 @@ class RepositoryDTO
         $this->fullName = $data['full_name'];
         $this->description = $data['description'] ?? '';
         $this->private = $data['private'];
-        $this->owner = isset($data['owner']) ? new UserDTO($data['owner']) : null;
+        $this->owner = isset($data['owner']) ? new User($data['owner']) : null;
         $this->htmlUrl = $data['html_url'];
         $this->language = $data['language'] ?? null;
         $this->forksCount = $data['forks_count'];

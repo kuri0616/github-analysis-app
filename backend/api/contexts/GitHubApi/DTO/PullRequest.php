@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Services\GitHub\DTOs;
-
+namespace App\Contexts\GitHubApi\DTO;
 use DateTime;
 
-class PullRequestDTO
+class PullRequest
 {
     public int $id;
     public int $pullRequestNumber;
     public string $title;
     public string $state;
     public bool $locked;
-    public ?UserDTO $user;
+    public ?User $user;
     public string $body;
     public string $createdAt;
     public string $updatedAt;
@@ -33,7 +32,7 @@ class PullRequestDTO
         $this->title = $data['title'];
         $this->state = $data['state'];
         $this->locked = $data['locked'];
-        $this->user = isset($data['user']) ? new UserDTO($data['user']) : null;
+        $this->user = isset($data['user']) ? new User($data['user']) : null;
         $this->body = $data['body'] ?? '';
         $this->createdAt = $data['created_at'];
         $this->updatedAt = $data['updated_at'];
@@ -55,7 +54,7 @@ class PullRequestDTO
     {
         return [
             'github_id' => $this->id,
-            'number' => $this->number,
+            'pull_request_number' => $this->pullRequestNumber,
             'title' => $this->title,
             'state' => $this->state,
             'locked' => $this->locked,
