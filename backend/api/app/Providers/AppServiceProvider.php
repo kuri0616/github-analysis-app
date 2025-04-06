@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Services\GitHub\GitHubApiClient;
+use App\Contexts\GitHubApi\Infra\GitHubApiClient;
+use App\Contexts\GitHubApi\Domain\Repository\IGitHubCollaboratorRepository;
+use App\Contexts\GitHubApi\Infra\Repository\GitHubCollaboratorRepository;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(GitHubApiClient::class, function ($app) {
             return new GitHubApiClient();
         });
+
+        $this->app->bind(IGitHubCollaboratorRepository::class, GitHubCollaboratorRepository::class);
     }
 
     /**
