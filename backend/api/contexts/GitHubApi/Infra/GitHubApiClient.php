@@ -121,7 +121,7 @@ class GitHubApiClient
         $cacheTtl = 86400;
         return Cache::remember($cacheKey, $cacheTtl, function () use ($owner, $repository) {
             $response = $this->makeRequest("repos/{$owner}/{$repository}/collaborators");
-            return new UserCollection(array_map(function ($collaborator) {
+            return new UserCollection(...array_map(function ($collaborator) {
                 return new User($collaborator);
             }, $response));
         });
