@@ -15,7 +15,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html
+# www-dataユーザーのホームディレクトリとPsySH設定ディレクトリを作成
+RUN mkdir -p /var/www/.config/psysh && \
+    chown -R www-data:www-data /var/www && \
+    chmod -R 755 /var/www
 
 RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/error-logging.ini \
     && echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/error-logging.ini
