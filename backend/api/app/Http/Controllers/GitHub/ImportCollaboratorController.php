@@ -9,24 +9,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GitHub\ImportCollaboratorsRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
-
 
 class ImportCollaboratorController extends Controller
 {
+    public function __construct(
+        private ImportCollaboratorsUseCase $useCase
+    ){
+    }
+
     /**
      * GitHubのコラボレーター情報を取得・保存するAPI
      *
      * @param ImportCollaboratorsRequest $request
-     * @param ImportCollaboratorsUseCase $useCase
      * @return JsonResponse
      */
-    public function __invoke(ImportCollaboratorsRequest $request, ImportCollaboratorsUseCase $useCase): JsonResponse
+    public function __invoke(ImportCollaboratorsRequest $request): JsonResponse
     {
         try {
-
-Log::debug('ImportCollaboratorController');
-            $result = $useCase->handle(
+            $result = $this->useCase->handle(
                 $request->route('owner'),
                 $request->route('repository')
             );
