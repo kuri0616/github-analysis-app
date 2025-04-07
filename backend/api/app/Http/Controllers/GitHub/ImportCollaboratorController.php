@@ -6,27 +6,27 @@ use App\Constants\ApiMessages;
 use App\Contexts\GitHubApi\Exception\GitHubApiException;
 use App\Contexts\GitHubApi\UseCase\ImportCollaboratorsUseCase;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GitHub\ImportCollaboratorsRequest;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
-
 
 class ImportCollaboratorController extends Controller
 {
+    public function __construct(
+        private readonly ImportCollaboratorsUseCase $useCase
+    ){
+    }
+
     /**
      * GitHubのコラボレーター情報を取得・保存するAPI
      *
-     * @param ImportCollaboratorsRequest $request
-     * @param ImportCollaboratorsUseCase $useCase
+     * @param Request $request
      * @return JsonResponse
      */
-    public function __invoke(ImportCollaboratorsRequest $request, ImportCollaboratorsUseCase $useCase): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
         try {
-
-Log::debug('ImportCollaboratorController');
-            $result = $useCase->handle(
+            $result = $this->useCase->handle(
                 $request->route('owner'),
                 $request->route('repository')
             );

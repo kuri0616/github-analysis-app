@@ -8,17 +8,12 @@ use Exception;
 
 
 
-class ImportCollaboratorsUseCase
+readonly class ImportCollaboratorsUseCase
 {
-    private GitHubApiClient $githubClient;
-    private IGitHubCollaboratorRepository $collaboratorRepository;
-
-    public function __construct(
-        GitHubApiClient $githubClient,
-        IGitHubCollaboratorRepository $collaboratorRepository
+     public function __construct(
+        private GitHubApiClient $githubClient,
+        private IGitHubCollaboratorRepository $collaboratorRepository
     ){
-        $this->githubClient = $githubClient;
-        $this->collaboratorRepository = $collaboratorRepository;
     }
 
     /**
@@ -27,6 +22,7 @@ class ImportCollaboratorsUseCase
      * @param string $owner
      * @param string $repository
      * @return array
+     * @throws Exception
      */
     public function handle(string $owner, string $repository): array
     {
