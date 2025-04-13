@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Contexts\GitHubApi\Domain\Repository;
+
 use App\Contexts\GitHubApi\DTO\PullRequestList;
 
 
@@ -13,4 +14,12 @@ interface IGitHubPullRequestRepository
      * @return int // 保存したレコード数
      */
     public function save(PullRequestList $pullRequestList): int;
+
+    /**
+     * リポジトリIDに紐づくプルリクエストを取得
+     *
+     * @param int $repositoryId
+     * @return array
+     */
+    public function findByRepositoryId(int $repositoryId): array;
 }
