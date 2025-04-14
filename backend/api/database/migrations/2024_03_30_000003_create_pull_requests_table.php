@@ -12,18 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pull_requests', function (Blueprint $table) {
-            $table->unsignedBigInteger('github_id')->primary();
+            $table->unsignedBigInteger('id')->primary();
             $table->unsignedBigInteger('repository_id');
-            $table->integer('number')->unsigned();
+            $table->integer('pull_request_number')->unsigned();
             $table->string('title');
             $table->enum('state', ['open', 'closed']);
-            $table->boolean('locked')->default(false);
-            $table->unsignedBigInteger('author_github_id')->nullable();
-            $table->string('author_login')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->text('body')->nullable();
             $table->string('html_url');
-            $table->integer('comments_count')->default(0);
-            $table->integer('review_comments_count')->default(0);
             $table->integer('commits_count')->default(0);
             $table->integer('additions_count')->default(0);
             $table->integer('deletions_count')->default(0);
@@ -34,13 +30,13 @@ return new class extends Migration
             $table->timestamp('merged_at')->nullable();
             
             $table->foreign('repository_id')
-                  ->references('github_id')
+                  ->references('id')
                   ->on('repositories')
                   ->onDelete('cascade');
             
-            $table->unique(['repository_id', 'number']);
+            $table->unique(['repository_id', 'pull_request_number']);
             
-            $table->foreign('author_github_id')
+            $table->foreign('user_id')
                   ->references('id')
                   ->on('github_users')
                   ->nullOnDelete();

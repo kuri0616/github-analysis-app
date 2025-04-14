@@ -11,25 +11,21 @@ class PullRequest extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'github_id';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'github_id',
+        'id',
         'repository_id',
-        'number',
+        'pull_request_number',
         'title',
         'state',
-        'locked',
-        'author_github_id',
-        'author_login',
+        'user_id',
         'body',
         'html_url',
-        'comments_count',
-        'review_comments_count',
         'commits_count',
         'additions_count',
         'deletions_count',
@@ -41,10 +37,7 @@ class PullRequest extends Model
     ];
 
     protected $casts = [
-        'locked' => 'boolean',
-        'number' => 'integer',
-        'comments_count' => 'integer',
-        'review_comments_count' => 'integer',
+        'pull_request_number' => 'integer',
         'commits_count' => 'integer',
         'additions_count' => 'integer',
         'deletions_count' => 'integer',
@@ -58,40 +51,22 @@ class PullRequest extends Model
 
     public function repository(): BelongsTo
     {
-        return $this->belongsTo(Repository::class, 'repository_id', 'github_id');
+        return $this->belongsTo(Repository::class, 'repository_id', 'id');
     }
 
-    public function author(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(GitHubUser::class, 'author_github_id', 'id');
+        return $this->belongsTo(GitHubUser::class, 'user_id', 'id');
     }
 
     public function reviews(): HasMany
     {
-        return $this->hasMany(PullRequestReview::class, 'pull_request_id', 'github_id');
+        return $this->hasMany(PullRequestReview::class, 'pull_request_id', 'id');
     }
 
     public function reviewComments(): HasMany
     {
-        return $this->hasMany(PullRequestReviewComment::class, 'pull_request_id', 'github_id');
+        return $this->hasMany(PullRequestReviewComment::class, 'pull_request_id', 'id');
     }
 
-    public function isMerged(): bool
-    {
-        return $this->merged_at !== null;
-    }
-
-    public function getDurationInHours(): ?float
-    {
-        if ($this->merged_at === null && $this->closed_at === null) {
-            return null;
-        }
-
-        $endDate = $this->merged_at ?? $this->closed_at;
-        $start = new \DateTime($this->created_at);
-        $end = new \DateTime($endDate);
-        $diff = $end->diff($start);
-
-        return ($diff->days * 24) + $diff->h + ($diff->i / 60);
-    }
 }

@@ -18,31 +18,28 @@ class GitHubUser extends Model
 
     protected $fillable = [
         'id',
-        'login',
+        'name',
         'avatar_url',
         'html_url',
-        'name',
-        'email',
-        'bio',
     ];
 
     public function repositories(): HasMany
     {
-        return $this->hasMany(Repository::class, 'owner_github_id', 'id');
+        return $this->hasMany(Repository::class, 'user_id', 'id');
     }
 
     public function pullRequests(): HasMany
     {
-        return $this->hasMany(PullRequest::class, 'author_github_id', 'id');
+        return $this->hasMany(PullRequest::class, 'user_id', 'id');
     }
 
     public function reviews(): HasMany
     {
-        return $this->hasMany(PullRequestReview::class, 'user_github_id', 'id');
+        return $this->hasMany(PullRequestReview::class, 'user_id', 'id');
     }
 
     public function reviewComments(): HasMany
     {
-        return $this->hasMany(PullRequestReviewComment::class, 'user_github_id', 'id');
+        return $this->hasMany(PullRequestReviewComment::class, 'user_id', 'id');
     }
 }

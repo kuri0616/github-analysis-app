@@ -13,12 +13,9 @@ return new class extends Migration
     {
         Schema::create('github_users', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
-            $table->string('login', 100)->unique();
+            $table->string('name', 100)->unique();
             $table->string('avatar_url')->nullable();
             $table->string('html_url')->nullable();
-            $table->string('name')->nullable();
-            $table->string('email')->nullable();
-            $table->text('bio')->nullable();
             $table->timestamps();
         });
     }

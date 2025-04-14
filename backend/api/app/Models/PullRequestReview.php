@@ -11,17 +11,16 @@ class PullRequestReview extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'github_id';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'github_id',
-        'pull_request_id',
-        'user_github_id',
-        'user_login',
+        'id',
+        'pull_request_id',        
+        'user_id',
         'state',
         'body',
         'submitted_at',
@@ -37,17 +36,17 @@ class PullRequestReview extends Model
 
     public function pullRequest(): BelongsTo
     {
-        return $this->belongsTo(PullRequest::class, 'pull_request_id', 'github_id');
+        return $this->belongsTo(PullRequest::class, 'pull_request_id', 'id');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(GitHubUser::class, 'user_github_id', 'id');
+        return $this->belongsTo(GitHubUser::class, 'user_id', 'id');
     }
 
     public function comments(): HasMany
     {
-        return $this->hasMany(PullRequestReviewComment::class, 'pull_request_review_id', 'github_id');
+        return $this->hasMany(PullRequestReviewComment::class, 'pull_request_review_id', 'id');
     }
 
 }
