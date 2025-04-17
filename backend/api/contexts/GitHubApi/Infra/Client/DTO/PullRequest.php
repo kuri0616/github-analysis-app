@@ -1,6 +1,6 @@
 <?php
 
-    namespace App\Contexts\GitHubApi\DTO;
+    namespace App\Contexts\GitHubApi\Infra\Client\DTO;
 
     use DateTime;
 
@@ -11,17 +11,13 @@
         public int $repositoryId;
         public string $title;
         public string $state;
-        public bool $locked;
         public ?User $user;
-        public string $body;
+        public ?string $body;
         public string $createdAt;
         public string $updatedAt;
         public ?string $closedAt;
         public ?string $mergedAt;
         public string $htmlUrl;
-        public ?array $labels;
-        public int $commentsCount;
-        public int $reviewCommentsCount;
         public int $commitsCount;
         public int $additionsCount;
         public int $deletionsCount;
@@ -34,7 +30,6 @@
             $this->repositoryId = $data['head']['repo']['id'] ?? 0;
             $this->title = $data['title'];
             $this->state = $data['state'];
-            $this->locked = $data['locked'];
             $this->user = isset($data['user']) ? new User($data['user']) : null;
             $this->body = $data['body'] ?? '';
             $this->createdAt = $data['created_at'];
@@ -42,11 +37,8 @@
             $this->closedAt = $data['closed_at'] ?? null;
             $this->mergedAt = $data['merged_at'] ?? null;
             $this->htmlUrl = $data['html_url'];
-            $this->labels = $data['labels'] ?? null;
 
             // これらのフィールドは詳細を取得したときのみ存在
-            $this->commentsCount = $data['comments'] ?? 0;
-            $this->reviewCommentsCount = $data['review_comments'] ?? 0;
             $this->commitsCount = $data['commits'] ?? 0;
             $this->additionsCount = $data['additions'] ?? 0;
             $this->deletionsCount = $data['deletions'] ?? 0;
@@ -56,22 +48,18 @@
         public function toArray(): array
         {
             return [
-                'github_id' => $this->id,
+                'id' => $this->id,
                 'pull_request_number' => $this->pullRequestNumber,
-                'number' => $this->pullRequestNumber,
                 'repository_id' => $this->repositoryId,
                 'title' => $this->title,
                 'state' => $this->state,
-                'locked' => $this->locked,
-                'user' => $this->user,
+                'user_id' => $this->user ? $this->user->id : null,
                 'body' => $this->body,
+                'html_url' => $this->htmlUrl,
                 'created_at' => $this->createdAt,
                 'updated_at' => $this->updatedAt,
                 'closed_at' => $this->closedAt,
                 'merged_at' => $this->mergedAt,
-                'html_url' => $this->htmlUrl,
-                'comments_count' => $this->commentsCount,
-                'review_comments_count' => $this->reviewCommentsCount,
                 'commits_count' => $this->commitsCount,
                 'additions_count' => $this->additionsCount,
                 'deletions_count' => $this->deletionsCount,
@@ -99,6 +87,7 @@
             if ($this->mergedAt === null && $this->closedAt === null) {
                 return null;
             }
+
             $endDate = $this->mergedAt ?? $this->closedAt;
             $start = new DateTime($this->createdAt);
             $end = new DateTime($endDate);
@@ -107,6 +96,12 @@
             return ($diff->days * 24) + $diff->h + ($diff->i / 60);
         }
 
+        /**
+         * 指定されたリポジトリIDのプルリクエストかどうかを判定
+         *
+         * @param int $repositoryId
+         * @return bool
+         */
         public function isFromRepository(int $repositoryId): bool
         {
             return $this->repositoryId === $repositoryId;
