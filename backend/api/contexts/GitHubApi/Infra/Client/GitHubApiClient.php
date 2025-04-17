@@ -1,13 +1,13 @@
 <?php
 
-    namespace App\Contexts\GitHubApi\Infra;
+namespace App\Contexts\GitHubApi\Infra\Client;
 
-    use App\Contexts\GitHubApi\DTO\PullRequest;
-    use App\Contexts\GitHubApi\DTO\PullRequestList;
-    use App\Contexts\GitHubApi\DTO\PullRequestNumbers;
-    use App\Contexts\GitHubApi\DTO\Repository;
-    use App\Contexts\GitHubApi\DTO\User;
-    use App\Contexts\GitHubApi\DTO\UserCollection;
+use App\Contexts\GitHubApi\Infra\Client\DTO\PullRequest;
+use App\Contexts\GitHubApi\Infra\Client\DTO\PullRequestList;
+use App\Contexts\GitHubApi\Infra\Client\DTO\PullRequestNumbers;
+use App\Contexts\GitHubApi\Infra\Client\DTO\Repository;
+use App\Contexts\GitHubApi\Infra\Client\DTO\User;
+    use App\Contexts\GitHubApi\Infra\Client\DTO\UserCollection;
     use App\Contexts\GitHubApi\Exception\GitHubApiException;
     use Illuminate\Support\Facades\Cache;
     use Illuminate\Support\Facades\Http;
