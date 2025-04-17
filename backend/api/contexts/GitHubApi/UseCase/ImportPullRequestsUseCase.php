@@ -4,7 +4,7 @@
 
 
     use App\Contexts\GitHubApi\Domain\Repository\IGitHubPullRequestRepository;
-    use App\Contexts\GitHubApi\Infra\GitHubApiClient;
+    use App\Contexts\GitHubApi\Infra\Client\GitHubApiClient;
     use Exception;
     use Illuminate\Support\Facades\Log;
 

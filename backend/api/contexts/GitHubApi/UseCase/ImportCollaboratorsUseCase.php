@@ -2,10 +2,10 @@
 namespace App\Contexts\GitHubApi\UseCase;
 
 use App\Contexts\GitHubApi\Domain\Repository\IGitHubCollaboratorRepository;
-use App\Contexts\GitHubApi\Infra\GitHubApiClient;
+use App\Contexts\GitHubApi\Infra\Client\GitHubApiClient;
 use Illuminate\Support\Facades\Log;
 use Exception;
-
+use App\Contexts\GitHubApi\Infra\Client\DTO\UserCollection;
 
 
 readonly class ImportCollaboratorsUseCase
