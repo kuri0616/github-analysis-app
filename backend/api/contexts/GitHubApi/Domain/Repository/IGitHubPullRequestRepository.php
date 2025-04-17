@@ -2,7 +2,7 @@
 
 namespace App\Contexts\GitHubApi\Domain\Repository;
 
-use App\Contexts\GitHubApi\DTO\PullRequestList;
+use App\Contexts\GitHubApi\Infra\Client\DTO\PullRequestList;
 
 
 interface IGitHubPullRequestRepository

@@ -2,7 +2,7 @@
 
 namespace App\Contexts\GitHubApi\Domain\Repository;
 
-use App\Contexts\GitHubApi\DTO\UserCollection;
+use App\Contexts\GitHubApi\Infra\Client\DTO\UserCollection;
 
 interface IGitHubCollaboratorRepository
 {
