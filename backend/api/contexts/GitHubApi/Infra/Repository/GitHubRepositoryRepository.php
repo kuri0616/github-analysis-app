@@ -14,8 +14,8 @@
 
         public function fetchAll(): Collection
         {
-            return Repository::class::query()
-                ->select('github_id', 'name', 'full_name', 'owner_login', 'html_url')
+            return Repository::query()
+                ->select('id', 'name', 'html_url')
                 ->get();
         }
     }

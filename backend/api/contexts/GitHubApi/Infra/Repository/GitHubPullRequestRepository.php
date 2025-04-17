@@ -15,18 +15,14 @@ class GitHubPullRequestRepository implements IGitHubPullRequestRepository
     {
         $pullRequestsParams = array_map(function ($pullRequest) {
             return [
-                'github_id' => $pullRequest->id,
-                'author_login' => $pullRequest->user->login,
-                'author_github_id' => $pullRequest->user->id,
+                'id' => $pullRequest->id,
+                'user_id' => $pullRequest->user->id,
                 'repository_id' => $pullRequest->repositoryId,
-                'number' => $pullRequest->pullRequestNumber,
+                'pull_request_number' => $pullRequest->pullRequestNumber,
                 'title' => $pullRequest->title,
                 'body' => $pullRequest->body,
                 'state' => $pullRequest->state,
                 'html_url' => $pullRequest->htmlUrl,
-                'locked' => $pullRequest->locked,
-                'comments_count' => $pullRequest->commentsCount,
-                'review_comments_count' => $pullRequest->reviewCommentsCount,
                 'commits_count' => $pullRequest->commitsCount,
                 'additions_count' => $pullRequest->additionsCount,
                 'deletions_count' => $pullRequest->deletionsCount,
@@ -40,13 +36,12 @@ class GitHubPullRequestRepository implements IGitHubPullRequestRepository
 
         return PullRequest::upsert(
             $pullRequestsParams,
-            ['github_id'],
+            ['id'],
             [
                 'title',
                 'repository_id',
-                'author_github_id',
-                'author_login',
-                'number',
+                'user_id',
+                'pull_request_number',
                 'body',
                 'state',
                 'created_at',
@@ -54,9 +49,6 @@ class GitHubPullRequestRepository implements IGitHubPullRequestRepository
                 'closed_at',
                 'merged_at',
                 'html_url',
-                'locked',
-                'comments_count',
-                'review_comments_count',
                 'commits_count',
                 'additions_count',
                 'deletions_count',
@@ -69,7 +61,7 @@ class GitHubPullRequestRepository implements IGitHubPullRequestRepository
     {
         return PullRequest::query()
             ->where('repository_id', $repositoryId)
-            ->with(['author', 'reviews'])
+            ->with(['user', 'reviews'])
             ->get()
             ->toArray();
     }

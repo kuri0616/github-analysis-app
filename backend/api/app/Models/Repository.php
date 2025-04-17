@@ -11,48 +11,34 @@ class Repository extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'github_id';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
     protected $fillable = [
-        'github_id',
+        'id',
         'name',
-        'full_name',
         'description',
         'is_private',
-        'owner_login',
-        'owner_github_id',
+        'user_id',
         'html_url',
-        'language',
-        'forks_count',
-        'stargazers_count',
-        'watchers_count',
-        'open_issues_count',
-        'default_branch',
-        'github_created_at',
-        'github_updated_at',
-        'github_pushed_at',
+        'created_at',
+        'updated_at',
+
     ];
 
     protected $casts = [
-        'is_private' => 'boolean',
-        'forks_count' => 'integer',
-        'stargazers_count' => 'integer',
-        'watchers_count' => 'integer',
-        'open_issues_count' => 'integer',
-        'github_created_at' => 'datetime',
-        'github_updated_at' => 'datetime',
-        'github_pushed_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    public function owner(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(GitHubUser::class, 'owner_github_id', 'id');
+        return $this->belongsTo(GitHubUser::class, 'user_id', 'id');
     }
 
     public function pullRequests(): HasMany
     {
-        return $this->hasMany(PullRequest::class, 'repository_id', 'github_id');
+        return $this->hasMany(PullRequest::class, 'repository_id', 'id');
     }
 }

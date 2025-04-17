@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contexts\GitHubApi\DTO;
+namespace App\Contexts\GitHubApi\Infra\Client\DTO;
 
 class User
 {
@@ -9,8 +9,6 @@ class User
     public string $avatarUrl;
     public string $htmlUrl;
     public ?string $name;
-    public ?string $email;
-    public ?string $bio;
 
     /**
      * コンストラクタ
@@ -24,8 +22,6 @@ class User
         $this->avatarUrl = $data['avatar_url'];
         $this->htmlUrl = $data['html_url'];
         $this->name = $data['name'] ?? null;
-        $this->email = $data['email'] ?? null;
-        $this->bio = $data['bio'] ?? null;
     }
 
     /**
@@ -36,13 +32,10 @@ class User
     public function toArray(): array
     {
         return [
-            'github_id' => $this->id,
-            'login' => $this->login,
+            'id' => $this->id,
+            'name' => $this->name,
             'avatar_url' => $this->avatarUrl,
             'html_url' => $this->htmlUrl,
-            'name' => $this->name,
-            'email' => $this->email,
-            'bio' => $this->bio,
         ];
     }
 }

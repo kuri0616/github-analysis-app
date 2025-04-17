@@ -10,18 +10,17 @@ class PullRequestReviewComment extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'github_id';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
     public $timestamps = false;
 
     protected $fillable = [
-        'github_id',
+        'id',
         'pull_request_id',
         'pull_request_review_id',
-        'user_github_id',
-        'user_login',
+        'user_id',
         'body',
         'html_url',
         'created_at',
@@ -31,20 +30,20 @@ class PullRequestReviewComment extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-    ];
+    ];  
 
     public function pullRequest(): BelongsTo
     {
-        return $this->belongsTo(PullRequest::class, 'pull_request_id', 'github_id');
+        return $this->belongsTo(PullRequest::class, 'pull_request_id', 'id');
     }
 
     public function review(): BelongsTo
     {
-        return $this->belongsTo(PullRequestReview::class, 'pull_request_review_id', 'github_id');
+        return $this->belongsTo(PullRequestReview::class, 'pull_request_review_id', 'id');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(GitHubUser::class, 'user_github_id', 'id');
+        return $this->belongsTo(GitHubUser::class, 'user_id', 'id');
     }
 }

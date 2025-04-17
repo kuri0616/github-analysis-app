@@ -1,6 +1,9 @@
 <?php
 
-    namespace App\Contexts\GitHubApi\DTO;
+    namespace App\Contexts\GitHubApi\Infra\Client\DTO;
+    
+    use App\Contexts\GitHubApi\Infra\Client\DTO\PullRequest;
+    
     readonly class PullRequestList
     {
         /**
@@ -21,5 +24,10 @@
             );
 
             return new PullRequestList(...array_values($filtered));
+        }
+
+        public function toArray(): array
+        {
+            return array_map(fn(PullRequest $pr) => $pr->toArray(), $this->values);
         }
     }
