@@ -8,5 +8,11 @@ export default defineConfig({
     host: true,
     port: 5173,
     strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'http://github_analysis_web',
+        changeOrigin: true,
+      },
+    },
   },
 });
