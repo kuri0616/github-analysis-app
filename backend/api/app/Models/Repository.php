@@ -41,4 +41,9 @@ class Repository extends Model
     {
         return $this->hasMany(PullRequest::class, 'repository_id', 'id');
     }
+
+    public function vulnerabilityScans(): HasMany
+    {
+        return $this->hasMany(VulnerabilityScan::class);
+    }
 }
