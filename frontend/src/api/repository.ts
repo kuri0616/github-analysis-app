@@ -2,7 +2,7 @@ import apiClient from "./client";
 
 export interface GitHubUser {
   id: number;
-  login: string;
+  name: string;
   avatar_url: string;
   html_url: string;
 }

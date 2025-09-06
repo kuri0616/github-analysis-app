@@ -76,7 +76,7 @@ const RepositoryList: React.FC = () => {
                   <span className="font-medium">ID:</span> {repo.id}
                 </div>
                 <div>
-                  <span className="font-medium">所有者:</span> {repo.user?.login || `User ${repo.user_id}`}
+                  <span className="font-medium">所有者:</span> {repo.user?.name || `User ${repo.user_id}`}
                 </div>
                 <div>
                   <span className="font-medium">作成日:</span> {new Date(repo.created_at).toLocaleDateString('ja-JP')}
