@@ -15,7 +15,7 @@
         public function fetchAll(): Collection
         {
             return Repository::query()
-                ->select('id', 'name', 'html_url')
+                ->with(['user'])
                 ->get();
         }
     }
