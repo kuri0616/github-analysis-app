@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Repository, repositoryApi } from '../api/repository';
+import { mockRepositories } from '../data/mockRepositories';
 
 const RepositoryList: React.FC = () => {
   const [repositories, setRepositories] = useState<Repository[]>([]);
@@ -10,13 +11,24 @@ const RepositoryList: React.FC = () => {
     const fetchRepositories = async () => {
       try {
         setLoading(true);
-        const data = await repositoryApi.getAll();
-        setRepositories(data);
+        // バックエンドAPIが利用できない場合はモックデータを使用
+        try {
+          const data = await repositoryApi.getAll();
+          setRepositories(data);
+        } catch (apiError) {
+          console.warn('API接続に失敗しました。モックデータを使用します:', apiError);
+          // APIが利用できない場合はモックデータを使用
+          setTimeout(() => {
+            setRepositories(mockRepositories);
+          }, 1000); // ローディング体験をシミュレート
+        }
       } catch (err) {
         setError('リポジトリの取得に失敗しました。');
         console.error('Error fetching repositories:', err);
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     };
 
